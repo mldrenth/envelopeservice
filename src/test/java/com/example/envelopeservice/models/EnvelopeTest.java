@@ -1,6 +1,6 @@
-package com.example.envelopeservice;
+package com.example.envelopeservice.models;
 
-import com.example.envelopeservice.models.Envelope;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,11 +10,14 @@ import static org.junit.Assert.assertEquals;
 
 public class EnvelopeTest {
     Envelope travel;
+    Account myAccount;
 
     @Before
     public void before(){
-        travel = new Envelope("Travel");
+        myAccount = new Account("My Account", AccountType.CURRENT);
+        travel = new Envelope("Travel", myAccount);
     }
+
 
     @Test
     public void hasName() {
@@ -29,6 +32,11 @@ public class EnvelopeTest {
     @Test
     public void hasGoalAmount0(){
         assertEquals(new BigDecimal("0.00"), travel.getGoalAmount());
+    }
+
+    @Test
+    public void hasAccount() {
+        assertEquals(myAccount, travel.getAccount());
     }
 
     @Test

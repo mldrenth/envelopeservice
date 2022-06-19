@@ -1,17 +1,54 @@
 package com.example.envelopeservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Entity
+@Table(name = "envelopes")
 public class Envelope {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "amount")
     private BigDecimal amount;
+
+    @Column(name = "goalAmount")
     private BigDecimal goalAmount;
 
-    public Envelope(String name) {
+    @ManyToOne
+    @JsonIgnoreProperties({"envelopes"})
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+
+    public Envelope(String name, Account account) {
         this.name = name;
         this.amount = new BigDecimal("0.00");
         this.goalAmount = new BigDecimal("0.00");
+        this.account = account;
+    }
+
+    Envelope(Long id, String name, Account account) {
+        this(name, account);
+        this.id = id;
+    }
+
+    public Envelope() {
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -36,6 +73,14 @@ public class Envelope {
 
     public void setGoalAmount(BigDecimal newGoalAmount) {
         this.goalAmount = newGoalAmount;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public void deposit(BigDecimal depositAmount){

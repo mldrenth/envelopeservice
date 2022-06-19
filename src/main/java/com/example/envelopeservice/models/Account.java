@@ -1,13 +1,30 @@
 package com.example.envelopeservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+@Entity
+@Table(name = "accounts")
 public class Account {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "accountType")
     private AccountType accountType;
+
+    @JsonIgnoreProperties({"accounts"})
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private ArrayList<Envelope> envelopes;
+
+    @Column(name = "availableAmount")
     private BigDecimal availableAmount;
 
     public Account(String name, AccountType accountType) {
@@ -15,6 +32,17 @@ public class Account {
         this.accountType = accountType;
         this.envelopes = new ArrayList<>();
         this.availableAmount = new BigDecimal("0.00");
+    }
+
+    public Account() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -77,8 +105,8 @@ public class Account {
         this.envelopes.add(envelope);
     }
 
-    public void depositIntoEnvelope(BigDecimal depositAmount, int index) {
+    public void depositIntoEnvelope(BigDecimal depositAmount, Long id) {
         BigDecimal withdrawnAmount = this.withdraw(depositAmount);
-        this.getEnvelopes().get(index).deposit(withdrawnAmount);
+        this.getEnvelopes().stream().filter(envelope -> envelope.getId().equals(id)).findAny().ifPresent(foundEnvelope -> foundEnvelope.deposit(withdrawnAmount));
     }
 }

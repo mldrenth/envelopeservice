@@ -1,8 +1,5 @@
-package com.example.envelopeservice;
+package com.example.envelopeservice.models;
 
-import com.example.envelopeservice.models.Account;
-import com.example.envelopeservice.models.AccountType;
-import com.example.envelopeservice.models.Envelope;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,8 +16,8 @@ public class AccountTest {
     @Before
     public void before() {
         myAccount = new Account("My Account", AccountType.CURRENT);
-        travel = new Envelope("Travel");
-        groceries = new Envelope("Groceries");
+        travel = new Envelope(1L,"Travel", myAccount);
+        groceries = new Envelope("Groceries", myAccount);
     }
 
     @Test
@@ -76,7 +73,7 @@ public class AccountTest {
     public void canAddToEnvelope() {
         myAccount.addEnvelope(travel);
         myAccount.deposit(new BigDecimal("200.00"));
-        myAccount.depositIntoEnvelope(new BigDecimal("100.00"), 0);
+        myAccount.depositIntoEnvelope(new BigDecimal("100.00"), travel.getId());
         assertEquals(new BigDecimal("100.00"), myAccount.getAvailableAmount());
         assertEquals(new BigDecimal("100.00"), myAccount.getEnvelopes().get(0).getAmount());
     }
