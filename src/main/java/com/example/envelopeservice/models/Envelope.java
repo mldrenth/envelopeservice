@@ -89,8 +89,9 @@ public class Envelope {
 
     public BigDecimal withdraw(BigDecimal withdrawAmount) {
         if (this.canWithdrawAmount(withdrawAmount)) {
-            this.setAmount(this.amount.subtract(withdrawAmount));
-            return this.amount.subtract(withdrawAmount);
+            BigDecimal withdrawnAmount = this.amount.subtract(withdrawAmount);
+            this.setAmount(withdrawnAmount);
+            return withdrawnAmount;
         }
         else {
             BigDecimal newWithdrawAmount = this.amount;

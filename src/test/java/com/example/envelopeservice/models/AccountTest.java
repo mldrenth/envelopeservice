@@ -78,4 +78,24 @@ public class AccountTest {
         assertEquals(new BigDecimal("100.00"), myAccount.getEnvelopes().get(0).getAmount());
     }
 
+    @Test
+    public void canDeductFromEnvelope() {
+        myAccount.addEnvelope(travel);
+        myAccount.deposit(new BigDecimal("200.00"));
+        myAccount.depositIntoEnvelope(new BigDecimal("100.00"), travel.getId());
+        myAccount.withdrawFromEnvelope(new BigDecimal("50"), travel.getId());
+        assertEquals(new BigDecimal("150.00"), myAccount.getAvailableAmount());
+        assertEquals(new BigDecimal("50.00"), myAccount.getEnvelopes().get(0).getAmount());
+    }
+
+    @Test
+    public void canNotDeductNegativeAmountFromEnvelope() {
+        myAccount.addEnvelope(travel);
+        myAccount.deposit(new BigDecimal("200.00"));
+        myAccount.depositIntoEnvelope(new BigDecimal("100.00"), travel.getId());
+        myAccount.withdrawFromEnvelope(new BigDecimal("150"), travel.getId());
+        assertEquals(new BigDecimal("200.00"), myAccount.getAvailableAmount());
+        assertEquals(new BigDecimal("0.00"), myAccount.getEnvelopes().get(0).getAmount());
+    }
+
 }

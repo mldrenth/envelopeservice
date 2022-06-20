@@ -109,4 +109,11 @@ public class Account {
         BigDecimal withdrawnAmount = this.withdraw(depositAmount);
         this.getEnvelopes().stream().filter(envelope -> envelope.getId().equals(id)).findAny().ifPresent(foundEnvelope -> foundEnvelope.deposit(withdrawnAmount));
     }
+
+    public void withdrawFromEnvelope(BigDecimal withdrawAmount, Long id) {
+        Envelope chosenEnvelope = this.getEnvelopes().stream().filter(envelope -> envelope.getId().equals(id)).findAny().orElse(null);
+        BigDecimal withdrawnAmount = chosenEnvelope.withdraw(withdrawAmount);
+        this.deposit(withdrawnAmount);
+
+    }
 }
