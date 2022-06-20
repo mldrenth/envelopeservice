@@ -24,6 +24,10 @@ public class Account {
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private ArrayList<Envelope> envelopes;
 
+    @JsonIgnoreProperties({"accounts"})
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private ArrayList<Transaction> transactions;
+
     @Column(name = "availableAmount")
     private BigDecimal availableAmount;
 
@@ -31,6 +35,7 @@ public class Account {
         this.name = name;
         this.accountType = accountType;
         this.envelopes = new ArrayList<>();
+        this.transactions = new ArrayList<>();
         this.availableAmount = new BigDecimal("0.00");
     }
 
@@ -71,6 +76,14 @@ public class Account {
 
     public int getEnvelopeAmount() {
         return this.envelopes.size();
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public BigDecimal getAvailableAmount() {
