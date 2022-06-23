@@ -11,6 +11,8 @@ public class AccountTest {
     Account myAccount;
     Envelope travel;
     Envelope groceries;
+    Transaction salary;
+    Transaction rent;
 
 
     @Before
@@ -18,6 +20,8 @@ public class AccountTest {
         myAccount = new Account("My Account", AccountType.CURRENT);
         travel = new Envelope(1L,"Travel", myAccount);
         groceries = new Envelope("Groceries", myAccount);
+        salary = new Transaction("Salary June", new BigDecimal("2000.00"), TransactionType.DEBIT, myAccount);
+        rent = new Transaction("Rent June", new BigDecimal("500.00"), TransactionType.CREDIT, myAccount);
     }
 
     @Test
@@ -96,6 +100,19 @@ public class AccountTest {
         myAccount.withdrawFromEnvelope(new BigDecimal("150"), travel.getId());
         assertEquals(new BigDecimal("200.00"), myAccount.getAvailableAmount());
         assertEquals(new BigDecimal("0.00"), myAccount.getEnvelopes().get(0).getAmount());
+    }
+
+    @Test
+    public void accountCanGetDebit() {
+        myAccount.receiveTransaction(salary);
+        assertEquals(new BigDecimal("2000.00"), myAccount.getAvailableAmount());
+    }
+
+    @Test
+    public void accountCanGetCredit() {
+        myAccount.receiveTransaction(salary);
+        myAccount.receiveTransaction(rent);
+        assertEquals(new BigDecimal("1500.00"), myAccount.getAvailableAmount());
     }
 
 }

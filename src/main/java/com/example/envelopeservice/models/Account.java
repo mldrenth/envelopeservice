@@ -129,4 +129,14 @@ public class Account {
         this.deposit(withdrawnAmount);
 
     }
+
+    public void receiveTransaction(Transaction transaction) {
+        if (transaction.getTransactionType() == TransactionType.DEBIT) {
+            this.deposit(transaction.getAmount());
+        }
+        else {
+            this.withdraw(transaction.getAmount());
+        }
+        this.transactions.add(transaction);
+    }
 }
