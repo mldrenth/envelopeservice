@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "accounts")
@@ -22,11 +23,11 @@ public class Account {
 
     @JsonIgnoreProperties({"accounts"})
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    private ArrayList<Envelope> envelopes;
+    private List<Envelope> envelopes;
 
     @JsonIgnoreProperties({"accounts"})
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    private ArrayList<Transaction> transactions;
+    private List<Transaction> transactions;
 
     @Column(name = "availableAmount")
     private BigDecimal availableAmount;
@@ -66,7 +67,7 @@ public class Account {
         this.accountType = accountType;
     }
 
-    public ArrayList<Envelope> getEnvelopes() {
+    public List<Envelope> getEnvelopes() {
         return envelopes;
     }
 
@@ -78,7 +79,7 @@ public class Account {
         return this.envelopes.size();
     }
 
-    public ArrayList<Transaction> getTransactions() {
+    public List<Transaction> getTransactions() {
         return transactions;
     }
 
